@@ -1,0 +1,29 @@
+﻿@* Частичное представление для таблицы с файлами *@
+@model IEnumerable<string>
+@if (Model != null && Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <td scope="col">№</td>
+                <td scope="col">Имя</td>
+                <td scope="col">Расширение</td>
+                <td scope="col">Размер</td>
+            </tr>
+        </thead>
+        <tbody>
+            @{var counter = 0;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <th scope="row">@(++counter)</th>
+                        <td><a href="@item">@System.IO.Path.GetFileNameWithoutExtension(item)</a></td>
+                        <td>@System.IO.Path.GetExtension(item)</td>
+                        <td>@(new FileInfo(item).Length)</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+

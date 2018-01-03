@@ -1,0 +1,59 @@
+﻿@section head{
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datetimepicker.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-theme.min.css" rel="stylesheet" />
+}
+@section scripts{
+    <script src="~/Scripts/moment-with-locales.js"></script>
+    <script type="text/javascript" src="~/Scripts/bootstrap-datetimepicker.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(function () {
+                var $dtp = $('.datetimepicker');
+                $dtp.datetimepicker({
+                    locale: 'ru',
+                    format: 'DD.MM.YYYY',
+                    showTodayButton: true,
+                    allowInputToggle: true
+                });
+                $('#from').on('dp.change', function (e) {
+                    $('#to').data("DateTimePicker").minDate(e.date)
+                });
+                $('#to').on('dp.change', function (e) {
+                    $('#from').data("DateTimePicker").maxDate(e.date)
+                });
+            });
+        });
+    </script>
+}
+@{
+    ViewBag.Title = "Даты";
+}
+<h2>Вычисление разности между датами</h2>
+@using (Ajax.BeginForm("Difference", new { }, new AjaxOptions
+{
+    HttpMethod = "POST",
+    UpdateTargetId = "dateresult",
+    InsertionMode = InsertionMode.Replace
+}, new { @class = "form-inline mt-1" }))
+{
+    <div class="form-group">
+        @Html.Label("С:")
+        <div class='input-group date datetimepicker'>
+            <input type='text' name="from" id="from" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("По:")
+        <div class='input-group date datetimepicker'>
+            <input type='text' name="to" id="to" class="form-control" />
+            @*<span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>*@
+        </div>
+    </div>
+    <button type="submit" class="btn">Посчитать</button>
+}
+<h3></h3>
+<div id="dateresult"></div>

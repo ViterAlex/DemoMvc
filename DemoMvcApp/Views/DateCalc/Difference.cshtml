@@ -1,0 +1,30 @@
+﻿@model System.TimeSpan
+@functions{
+    string ending(int number, string root, string one, string two, string five)
+    {
+        if (number == 0)
+        {
+            return root + five;
+        }
+        if (number == 1)
+        {
+            return root + one;
+        }
+        else if (5 > number && number >= 2)
+        {
+            return root + two;
+        }
+        else if (number <= 20)
+        {
+            return root + five;
+        }
+        return ending(number % 10, root, one, two, five);
+    }
+}
+
+@if (Model != TimeSpan.Zero)
+{
+    <div >
+        <span class="glyphicon glyphicon-info-sign"></span>&nbsp;<span>Между выбранными датами <strong>@Model.TotalDays</strong> @ending(Model.Days, "д", "ень", "ня", "ней").</span>
+    </div>
+}

@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Каталог";
+}
+<h2>@ViewBag.Title</h2>
+<form method="post">
+    <div class="row">
+        <div class="col-lg">
+            <div class="input-group">
+                <input type="text" class="form-control" id="path "name="path" placeholder="Путь к каталогу">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" id="submit" type="submit">Показать</button>
+                </span>
+            </div><!-- /input-group -->
+            <script type="text/javascript">
+                //Enter в поле ввода
+                $("#path").keyup(function (event) {
+                    if (event.keyCode === 13) {
+                        $("#submit").click();
+                    }
+                });
+            </script>
+        </div><!-- /.col-lg-6 -->
+    </div>
+</form>
+@Html.Action("GetCatalog")

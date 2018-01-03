@@ -1,0 +1,61 @@
+﻿@* Частичное представление для svg-содержимого *@
+@using DemoMvcApp.Models;
+@using System.Globalization;
+@model DemoMvcApp.Models.PtoModel
+@{
+    if (Model != null)
+    {
+        var pt0 = Model.Points[0];
+        var cult = CultureInfo.InvariantCulture;
+        var title = string.Empty;
+        if (!double.IsNaN(pt0.X) && !double.IsNaN(pt0.Y))
+        {
+            if (Model.Points.Count >= 3)
+            {
+                var mid = PtoModel.MidPoint(Model.Points[1], Model.Points[2]);
+                <line x1="@Model.Points[1].X.ToString("f2", cult)"
+                      y1="@Model.Points[1].Y.ToString("f2", cult)"
+                      x2="@Model.Points[2].X.ToString("f2", cult)"
+                      y2="@Model.Points[2].Y.ToString("f2", cult)"
+                      class="line" />
+            }
+            if (Model.Points.Count >= 4)
+            {
+                var mid = PtoModel.MidPoint(Model.Points[1], Model.Points[2]);
+                <line x1="@mid.X.ToString("f2", cult)"
+                      y1="@mid.Y.ToString("f2", cult)"
+                      x2="@Model.Points[3].X.ToString("f2", cult)"
+                      y2="@Model.Points[3].Y.ToString("f2", cult)"
+                      class="line" />
+                var pto = PtoModel.DivideLine(mid, Model.Points[3], 30d / 70d);
+                title = $"({pto.X:f2},{pto.Y:f2})";
+                <circle cx="@pto.X.ToString("f2", cult)"
+                        cy="@pto.Y.ToString("f2", cult)"
+                        r="3" class="controlPoint" />
+                if (Model.DrawCircles)
+                {
+                    <circle cx="@pto.X.ToString("f2", cult)"
+                            cy="@pto.Y.ToString("f2", cult)" r="@Model.Radius" class="circle" />
+                    <circle cx="@pt0.X.ToString("f2", cult)"
+                            cy="@pt0.Y.ToString("f2", cult)" r="@Model.Radius" class="circle" />
+                }
+            }
+            <circle cx="@pt0.X.ToString("f2", cult)"
+                    cy="@pt0.Y.ToString("f2", cult)" r="10" class="controlPoint point" />
+
+            for (int i = 1; i < Model.Points.Count; i++)
+            {
+                var pt = Model.Points[i];
+                title = $"({pt.X:f2},{pt.Y:f2})";
+                <g class="point">
+                    <circle cx="@pt.X.ToString("f2", cult)"
+                            cy="@pt.Y.ToString("f2", cult)"
+                            title="@title"
+                            r="10" class="pt point" />
+                    <text text-anchor="middle" dominant-baseline="central" x="@pt.X.ToString("f2", cult)" y="@pt.Y.ToString("f2", cult)" class="text">@i</text>
+                </g>
+            }
+        }
+    }
+
+}
